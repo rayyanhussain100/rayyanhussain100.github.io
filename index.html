@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rayyan Hussain</title>
+<meta name="description" content="Rayyan Hussain, AI/ML Engineer building production voice agents, RAG systems and agentic workflows.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: single reading column; hero with a live voice waveform, a metrics "readout" strip, then case-study style sections */
+:root {
+  --bg: #F5F7F8;
+  --surface: #FFFFFF;
+  --ink: #12181D;
+  --muted: #56636C;
+  --line: #DCE3E6;
+  --accent: #0B7A72;
+  --accent-soft: #DDF0EE;
+  --warm: #C9821A;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1417; --surface: #161D21; --ink: #E8EEF0; --muted: #98A6AE;
+    --line: #26323A; --accent: #43C2B6; --accent-soft: #13302D; --warm: #E3A64A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1417; --surface: #161D21; --ink: #E8EEF0; --muted: #98A6AE;
+  --line: #26323A; --accent: #43C2B6; --accent-soft: #13302D; --warm: #E3A64A;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  padding-inline: 20px;
+  padding-block: 0;
+}
+.wrap { max-width: 980px; margin: 0 auto; }
+a { color: var(--accent); text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+
+/* Nav */
+nav.top {
+  display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; justify-content: space-between;
+  padding-block: 22px;
+  font-family: var(--mono); font-size: 13px; letter-spacing: .04em;
+}
+nav.top .mark { font-weight: 500; color: var(--ink); text-decoration: none; }
+nav.top ul { display: flex; flex-wrap: wrap; gap: 4px 20px; list-style: none; margin: 0; padding: 0; }
+nav.top ul a { color: var(--muted); text-decoration: none; }
+nav.top ul a:hover { color: var(--accent); }
+
+/* Hero */
+.hero { padding-block: 48px 36px; display: grid; gap: 28px; }
+.eyebrow {
+  font-family: var(--mono); font-size: 13px; text-transform: uppercase; letter-spacing: .12em;
+  color: var(--accent); display: flex; align-items: center; gap: 10px;
+}
+.eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 4px var(--accent-soft); }
+h1 {
+  font-family: var(--display); font-weight: 800; font-size: clamp(44px, 9vw, 92px);
+  line-height: .98; letter-spacing: -.03em; margin: 0; text-wrap: balance;
+}
+.lede { font-size: clamp(19px, 2.4vw, 23px); line-height: 1.45; color: var(--muted); max-width: 40ch; margin: 0; text-wrap: pretty; }
+.lede strong { color: var(--ink); font-weight: 600; }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; padding: 11px 18px; border-radius: 999px;
+  font-family: var(--body); font-weight: 600; font-size: 16px; text-decoration: none; cursor: pointer;
+  border: 1px solid var(--ink); background: var(--ink); color: var(--bg);
+}
+.btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+.btn:hover { border-color: var(--accent); }
+.btn.ghost:hover { color: var(--accent); }
+
+.wave-box { position: relative; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+#wave { display: block; width: 100%; height: 96px; }
+.wave-label {
+  position: absolute; right: 0; bottom: 6px; font-family: var(--mono); font-size: 11px;
+  color: var(--muted); letter-spacing: .08em; background: var(--bg); padding-left: 8px;
+}
+
+/* Readout metrics */
+.readout {
+  display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0;
+  border-bottom: 1px solid var(--line);
+}
+.readout div { padding: 18px 16px 18px 0; }
+.readout div + div { padding-left: 16px; border-left: 1px solid var(--line); }
+.readout b {
+  display: block; font-family: var(--display); font-weight: 700; font-size: clamp(26px, 4vw, 38px);
+  letter-spacing: -.02em; font-variant-numeric: tabular-nums; line-height: 1.1;
+}
+.readout span { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: .03em; }
+@media (max-width: 640px) {
+  .readout { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .readout div:nth-child(3) { padding-left: 0; border-left: 0; }
+  .readout div:nth-child(n+3) { border-top: 1px solid var(--line); }
+}
+
+/* Sections */
+section { padding-block: 64px 8px; }
+.sec-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 28px; }
+.sec-head h2 {
+  font-family: var(--display); font-weight: 700; font-size: clamp(28px, 4vw, 40px);
+  letter-spacing: -.02em; margin: 0; line-height: 1.1;
+}
+.sec-head .tag { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; }
+p { margin: 0; }
+.prose { max-width: 66ch; display: grid; gap: 14px; color: var(--ink); }
+.prose p { color: var(--muted); }
+.prose p strong { color: var(--ink); font-weight: 600; }
+
+/* Experience timeline */
+.roles { display: grid; gap: 40px; }
+.role { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 8px 32px; }
+.role .when { font-family: var(--mono); font-size: 13px; color: var(--muted); padding-top: 6px; font-variant-numeric: tabular-nums; }
+.role h3 { font-family: var(--display); font-weight: 700; font-size: 22px; margin: 0; letter-spacing: -.01em; }
+.role .org { color: var(--accent); font-weight: 600; }
+.role ul { margin: 12px 0 0; padding-left: 18px; display: grid; gap: 8px; color: var(--muted); }
+.role li::marker { color: var(--accent); }
+.role li strong { color: var(--ink); font-weight: 600; }
+@media (max-width: 640px) { .role { grid-template-columns: minmax(0, 1fr); } .role .when { padding-top: 0; } }
+
+/* Case studies */
+.cases { display: grid; gap: 20px; }
+.case {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px;
+  padding: 28px; display: grid; gap: 18px;
+}
+.case-top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; align-items: baseline; }
+.case h3 { font-family: var(--display); font-weight: 700; font-size: clamp(22px, 3vw, 27px); margin: 0; letter-spacing: -.015em; line-height: 1.2; text-wrap: balance; }
+.case .meta { font-family: var(--mono); font-size: 12px; color: var(--muted); letter-spacing: .04em; }
+.badge {
+  display: inline-block; font-family: var(--mono); font-size: 12px; padding: 3px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--warm) 16%, transparent); color: var(--warm); font-weight: 500;
+}
+.case .summary { color: var(--muted); max-width: 70ch; }
+.case .summary strong { color: var(--ink); font-weight: 600; }
+.case-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; border-top: 1px solid var(--line); padding-top: 18px; }
+.case-grid h4 { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin: 0 0 6px; font-weight: 500; }
+.case-grid p { font-size: 15px; color: var(--muted); line-height: 1.55; }
+.case-grid p strong { color: var(--ink); font-weight: 600; }
+.stack { display: flex; flex-wrap: wrap; gap: 6px; }
+.stack span {
+  font-family: var(--mono); font-size: 12px; padding: 4px 9px; border-radius: 6px;
+  border: 1px solid var(--line); color: var(--muted);
+}
+@media (max-width: 760px) { .case-grid { grid-template-columns: minmax(0, 1fr); } .case { padding: 22px; } }
+
+/* Skills */
+.skills { display: grid; gap: 0; border-top: 1px solid var(--line); }
+.skill-row { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: 8px 32px; padding-block: 16px; border-bottom: 1px solid var(--line); }
+.skill-row h3 { font-family: var(--mono); font-size: 13px; font-weight: 500; letter-spacing: .04em; color: var(--ink); margin: 0; padding-top: 4px; }
+@media (max-width: 640px) { .skill-row { grid-template-columns: minmax(0, 1fr); } }
+
+/* Education */
+.edu { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 24px; align-items: baseline; border-top: 1px solid var(--line); padding-top: 18px; }
+.edu h3 { font-family: var(--display); font-weight: 700; font-size: 22px; margin: 0; letter-spacing: -.01em; }
+.edu p { color: var(--muted); }
+.edu .when { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+
+/* Contact */
+.contact {
+  margin-block: 72px 40px; padding: 40px 32px; border-radius: 18px;
+  background: var(--ink); color: var(--bg); display: grid; gap: 18px;
+}
+.contact h2 { font-family: var(--display); font-weight: 800; font-size: clamp(30px, 5vw, 52px); letter-spacing: -.03em; line-height: 1.02; margin: 0; text-wrap: balance; }
+.contact p { color: color-mix(in srgb, var(--bg) 72%, var(--ink)); max-width: 52ch; }
+.contact .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.email {
+  font-family: var(--mono); font-size: 15px; padding: 10px 14px; border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--bg) 30%, var(--ink)); user-select: all; overflow-wrap: anywhere;
+}
+.contact .btn { background: var(--bg); color: var(--ink); border-color: var(--bg); }
+.contact .btn.ghost { background: transparent; color: var(--bg); border-color: color-mix(in srgb, var(--bg) 30%, var(--ink)); }
+footer { font-family: var(--mono); font-size: 12px; color: var(--muted); padding-block: 0 40px; }
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero > * { animation: rise .6s ease-out both; }
+  .hero > *:nth-child(2) { animation-delay: .06s; }
+  .hero > *:nth-child(3) { animation-delay: .12s; }
+  .hero > *:nth-child(4) { animation-delay: .18s; }
+  @keyframes rise { from { transform: translateY(10px); opacity: .001; } to { transform: none; opacity: 1; } }
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="top" aria-label="Main">
+    <a class="mark" href="#top">rayyan.hussain</a>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="eyebrow"><span class="dot" aria-hidden="true"></span>AI/ML Engineer at Red Buffer</div>
+    <h1>Rayyan Hussain</h1>
+    <p class="lede">I build <strong>production AI systems</strong>: voice agents, RAG assistants and agentic workflows that run reliably on GCP and answer real users every day.</p>
+    <div class="cta">
+      <a class="btn" href="#work">See my work</a>
+      <a class="btn ghost" href="https://www.linkedin.com/in/rayyan-hussain-928612246/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </header>
+
+  <div class="wave-box" aria-hidden="true">
+    <canvas id="wave"></canvas>
+    <span class="wave-label">VOICE AGENT · &lt;200 ms</span>
+  </div>
+  <div class="readout" role="list" aria-label="Production numbers">
+    <div role="listitem"><b>99.9%</b><span>voice agent uptime</span></div>
+    <div role="listitem"><b>&lt;200ms</b><span>response latency</span></div>
+    <div role="listitem"><b>1,000+</b><span>daily voice interactions</span></div>
+    <div role="listitem"><b>92%</b><span>RAG retrieval accuracy</span></div>
+  </div>
+
+  <section id="about">
+    <div class="sec-head"><h2>About</h2></div>
+    <div class="prose">
+      <p>I'm an AI/ML engineer with <strong>2+ years of hands-on AI/ML experience</strong>, including over a year shipping production-grade AI systems and the backend services behind them.</p>
+      <p>Most of my work is in Python: LLM applications, retrieval-augmented generation and agent orchestration with LangGraph. I care about the unglamorous parts that make AI useful in production, like latency, uptime, error handling and monitoring, and I like owning a system end to end, from the client's requirements to the deployed service.</p>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="sec-head"><h2>Experience</h2></div>
+    <div class="roles">
+      <article class="role">
+        <div class="when">Jun 2025 – Present</div>
+        <div>
+          <h3>Machine Learning Engineer <span class="org">· Red Buffer</span></h3>
+          <ul>
+            <li><strong>Architected</strong> production AI voice agents for healthcare clients, with speech-to-text and text-to-speech pipelines on GCP serving 1,000+ daily interactions at 99.9% uptime and sub-200ms latency.</li>
+            <li><strong>Built</strong> AI agents with custom tool integrations and LangGraph orchestration, cutting client delivery time by 40% and saving 17+ engineering hours a week.</li>
+            <li><strong>Designed</strong> end-to-end RAG chatbots with Gemini, LangChain and ChromaDB, handling 500+ daily queries at 92% retrieval accuracy.</li>
+            <li><strong>Integrated</strong> RAG assistants into Slack with the OpenAI SDK, reducing internal support response times by 40%.</li>
+            <li><strong>Engineered</strong> a metadata pipeline unifying call audio, transcripts and summaries into one backend store for downstream AI analytics.</li>
+          </ul>
+        </div>
+      </article>
+      <article class="role">
+        <div class="when">Jun 2024 – Aug 2024</div>
+        <div>
+          <h3>Software Development Intern <span class="org">· Systems Limited</span></h3>
+          <ul>
+            <li><strong>Developed</strong> RESTful APIs and database integrations in Spring Boot and MySQL for healthcare data management, following SOLID principles.</li>
+            <li><strong>Optimized</strong> queries and indexing to cut API response latency by 25%, and resolved 15+ bugs through Postman API testing.</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section id="work">
+    <div class="sec-head"><h2>Selected work</h2><span class="tag">Case studies</span></div>
+    <div class="cases">
+
+      <article class="case">
+        <div class="case-top">
+          <h3>Healthcare AI Voice Agents</h3>
+          <span class="meta">Red Buffer · 2025 – present</span>
+        </div>
+        <p class="summary"><strong>Delivered</strong> voice agents that handle live conversations for healthcare clients, running at 99.9% uptime with sub-200ms latency across 1,000+ interactions a day.</p>
+        <div class="case-grid">
+          <div><h4>Challenge</h4><p>Turn client requirements into voice agents that respond fast enough to feel natural and stay up for real patient-facing traffic.</p></div>
+          <div><h4>Approach</h4><p>Speech-to-text and text-to-speech pipelines deployed on GCP behind load balancing, with health monitoring on every service.</p></div>
+          <div><h4>Outcome</h4><p><strong>99.9%</strong> uptime, <strong>&lt;200ms</strong> latency, <strong>1,000+</strong> daily interactions.</p></div>
+        </div>
+        <div class="stack"><span>Python</span><span>GCP Cloud Run</span><span>Load Balancing</span><span>STT / TTS</span><span>Monitoring</span></div>
+      </article>
+
+      <article class="case">
+        <div class="case-top">
+          <h3>RAG Assistants for Web and Slack</h3>
+          <span class="meta">Red Buffer · 2025 – present</span>
+        </div>
+        <p class="summary"><strong>Designed</strong> retrieval-augmented chatbots that answer 500+ questions a day from company knowledge, and brought them into Slack for internal support.</p>
+        <div class="case-grid">
+          <div><h4>Challenge</h4><p>Give accurate, grounded answers from large document sets instead of generic LLM responses.</p></div>
+          <div><h4>Approach</h4><p>Gemini with LangChain, semantic chunking and tuned embeddings in ChromaDB; a Slack assistant built on the OpenAI SDK with error handling and monitoring.</p></div>
+          <div><h4>Outcome</h4><p><strong>92%</strong> retrieval accuracy, <strong>500+</strong> daily queries, support responses <strong>40%</strong> faster.</p></div>
+        </div>
+        <div class="stack"><span>Gemini</span><span>LangChain</span><span>ChromaDB</span><span>OpenAI SDK</span><span>Slack</span></div>
+      </article>
+
+      <article class="case">
+        <div class="case-top">
+          <h3>ML-Based Network Traffic Classification</h3>
+          <span class="badge">2nd place, Industry Open House</span>
+        </div>
+        <p class="meta">NUST · Sep 2024 – May 2025</p>
+        <p class="summary"><strong>Achieved</strong> 94% accuracy classifying video and non-video network traffic, then wired the model into a software-defined network for real-time traffic control.</p>
+        <div class="case-grid">
+          <div><h4>Challenge</h4><p>Tell video traffic apart from everything else quickly enough for the network to react in real time.</p></div>
+          <div><h4>Approach</h4><p>A Decision Tree classifier built through feature engineering and hyperparameter tuning, integrated into an SDN architecture and tested end to end.</p></div>
+          <div><h4>Outcome</h4><p><strong>94%</strong> accuracy and <strong>35%</strong> better categorization efficiency.</p></div>
+        </div>
+        <div class="stack"><span>Python</span><span>Decision Trees</span><span>SDN</span></div>
+      </article>
+
+      <article class="case">
+        <div class="case-top">
+          <h3>Customer Delivery Insights Platform</h3>
+          <span class="meta">Mar 2025 – Apr 2025</span>
+        </div>
+        <p class="summary"><strong>Built</strong> an ETL pipeline and Power BI dashboard over 60K+ delivery records that surfaced on-time, in-full (OTIF) and partner performance issues.</p>
+        <div class="case-grid">
+          <div><h4>Challenge</h4><p>Turn raw delivery records into metrics an operations team can act on.</p></div>
+          <div><h4>Approach</h4><p>A Python ETL pipeline with validation and logging, SQL-defined KPIs and an interactive Power BI dashboard.</p></div>
+          <div><h4>Outcome</h4><p><strong>60K+</strong> records processed, <strong>15%</strong> operational efficiency improvement.</p></div>
+        </div>
+        <div class="stack"><span>Python</span><span>SQL</span><span>Power BI</span><span>ETL</span></div>
+      </article>
+
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="sec-head"><h2>Skills</h2></div>
+    <div class="skills">
+      <div class="skill-row"><h3>Languages &amp; core</h3><div class="stack"><span>Python</span><span>SQL</span><span>RESTful API design</span><span>Git</span><span>System architecture</span></div></div>
+      <div class="skill-row"><h3>AI/ML</h3><div class="stack"><span>LangChain</span><span>LangGraph</span><span>OpenAI SDK</span><span>Vertex AI</span><span>RAG</span><span>Agentic AI</span><span>NLP</span><span>Tool calling</span><span>MCP</span></div></div>
+      <div class="skill-row"><h3>Production</h3><div class="stack"><span>GCP Cloud Run</span><span>Load Balancing</span><span>Azure</span><span>Docker</span><span>MongoDB</span><span>Vector databases</span><span>Deployment &amp; monitoring</span></div></div>
+      <div class="skill-row"><h3>Developer tools</h3><div class="stack"><span>Cursor</span><span>Claude Code</span><span>Claude Cowork</span></div></div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="sec-head"><h2>Education</h2></div>
+    <div class="edu">
+      <div>
+        <h3>National University of Sciences and Technology</h3>
+        <p>Bachelor of Science in Computer Science</p>
+      </div>
+      <span class="when">Nov 2021 – Jun 2025</span>
+    </div>
+  </section>
+
+  <aside class="contact" id="contact">
+    <h2>Building something with AI? Let's talk.</h2>
+    <p>I'm open to AI/ML engineering roles and projects. The quickest way to reach me is email or LinkedIn.</p>
+    <div class="row">
+      <span class="email" id="email">rayyanhussain500@gmail.com</span>
+      <button class="btn" type="button" id="copy">Copy email</button>
+      <a class="btn ghost" href="https://www.linkedin.com/in/rayyan-hussain-928612246/" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </aside>
+
+  <footer>© 2026 Rayyan Hussain</footer>
+</div>
+
+<script>
+(function () {
+  // Copy email
+  var btn = document.getElementById('copy');
+  var email = document.getElementById('email');
+  btn.addEventListener('click', function () {
+    var text = email.textContent.trim();
+    function selectIt() {
+      var r = document.createRange(); r.selectNodeContents(email);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      btn.textContent = 'Selected, press Ctrl+C';
+    }
+    try {
+      navigator.clipboard.writeText(text).then(function () { btn.textContent = 'Copied'; }, selectIt);
+    } catch (e) { selectIt(); }
+    setTimeout(function () { btn.textContent = 'Copy email'; }, 2500);
+  });
+
+  // Voice waveform
+  var c = document.getElementById('wave');
+  var ctx = c.getContext('2d');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function size() {
+    var dpr = window.devicePixelRatio || 1;
+    c.width = c.clientWidth * dpr; c.height = c.clientHeight * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function color(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
+  function draw(t) {
+    var w = c.clientWidth, h = c.clientHeight, mid = h / 2;
+    ctx.clearRect(0, 0, w, h);
+    var bar = 3, gap = 3, n = Math.floor(w / (bar + gap));
+    var accent = color('--accent'), line = color('--line');
+    for (var i = 0; i < n; i++) {
+      var x = i * (bar + gap);
+      var p = i / n;
+      // speech-like envelope: phrases separated by pauses
+      var env = Math.max(0, Math.sin(p * Math.PI * 5 + t * 0.0006)) * (0.55 + 0.45 * Math.sin(p * 23 + t * 0.002));
+      var amp = Math.abs(env) * (h * 0.42) * (0.6 + 0.4 * Math.sin(i * 1.7 + t * 0.006));
+      amp = Math.max(1.5, amp);
+      ctx.fillStyle = env > 0.08 ? accent : line;
+      ctx.fillRect(x, mid - amp, bar, amp * 2);
+    }
+  }
+  size(); draw(0);
+  window.addEventListener('resize', function () { size(); draw(performance.now()); });
+  if (!reduce) {
+    (function loop(t) { draw(t); requestAnimationFrame(loop); })(0);
+  }
+})();
+</script>
+</body>
+</html>
